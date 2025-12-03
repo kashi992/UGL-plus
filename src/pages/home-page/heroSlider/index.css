@@ -3,6 +3,7 @@
   flex-direction: column;
   position: relative;
   flex: 1;
+  background-color: var(--secondaryColor);
 }
 
 .heroWrap .container {
