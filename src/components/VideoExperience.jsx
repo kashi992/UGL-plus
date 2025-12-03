@@ -106,10 +106,10 @@ const VideoExperience = () => {
             key={scene.id}
             src={scene.videoSrc}
             className="absolute inset-0 w-full h-full left-0 top-0 right-0 bottom-0 object-cover"
-            autoPlay
+            autoPlay={scene.id === activeSceneId}
             muted
             loop
-            preload="auto"
+        preload={scene.id === activeSceneId ? "auto" : "metadata"}
             style={{
               opacity: scene.id === activeSceneId ? 1 : 0,
               transition: "opacity 0s linear",
@@ -134,7 +134,7 @@ const VideoExperience = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: overlayVisible ? 1 : 0 }}
               transition={{ duration: OVERLAY_FADE_TIME }}
-              preload="auto"
+              preload="metadata"
             />
 
             {/* Close button ONLY for looping detail videos */}

@@ -7,6 +7,14 @@ const transitionSection1ToMain = "https://cpb-uglsolution-videos.s3-accelerate.a
 const UGLServices3_asset1 = "https://cpb-uglsolution-videos.s3-accelerate.amazonaws.com/UGL-plus/Electrical.mp4";
 const UGLServices3_asset2 = "https://cpb-uglsolution-videos.s3-accelerate.amazonaws.com/UGL-plus/Mechanical.mp4";
 
+// import home1 from "../assets/videos/Home1.mp4";
+// import transitionMainToSection1 from "../assets/videos/Tranistions.mp4";
+// import home2 from "../assets/videos/Image_to_Video_END.mp4";
+// import transitionSection1ToMain from "../assets/videos/Tranistions-out.mp4";
+
+// import UGLServices3_asset1 from "../assets/videos/Electrical.mp4";
+// import UGLServices3_asset2 from "../assets/videos/Mechanical.mp4";
+
 export const scenes = {
   // 🔹 MAIN SCENE
   main: {
