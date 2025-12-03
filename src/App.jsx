@@ -1,12 +1,13 @@
-
+import Navbar from "./layout/navbar/navbar";
+import Routers from "./router/routers";
+import "./assets/styles/main.css";
 function App() {
 
   return (
-  <div className="min-h-screen flex items-center justify-center bg-red-900">
-      <h1 className="text-4xl font-bold text-white">
-        Tailwind is working- test 🚀
-      </h1>
-    </div>
+    <>
+      <Navbar />
+      <Routers />
+    </>
   )
 }
 

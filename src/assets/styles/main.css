@@ -1,0 +1,148 @@
+@import url(./fonts.css);
+
+:root {
+  --primaryFont: "Montserrat";
+  --primaryColor: #184178;
+  --secondaryColor: #529bbe;
+  --whiteColor: #ffffff;
+  --blackColor: #000000;
+}
+.primaryClrBg{
+  background-color: var(--primaryColor);
+}
+.primaryClr{
+  color: var(--primaryColor);
+}
+.secondaryClrBg{
+  background-color: var(--secondaryColor);
+}
+.secondaryClr{
+  color: var(--secondaryColor);
+}
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: var(--primaryFont);
+  line-height: 1.2;
+}
+
+body,
+html {
+  overflow-x: clip !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+#root{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+} */
+
+a {
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: none;
+}
+
+input:focus-visible {
+  outline: none;
+}
+
+textarea:focus-visible {
+  outline: none;
+}
+
+select:focus-visible {
+  outline: none;
+}
+
+ul {
+  list-style: none;
+}
+
+.flex_align {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex_bt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container {
+  max-width: 95%;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+a,
+button,
+input[type=button],
+input[type=submit] {
+  transition: color .3s ease, background-color .3s ease, border-color .3s ease;
+}
+button{
+  cursor: pointer;
+}
+
+.slick-track {
+  display: flex;
+  align-items: center;
+}
+
+.mainWraper {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 1024px) {
+  .container {
+    max-width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+}
+
+@media screen and (max-width: 575px) {
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .mainWraper {
+    min-height: auto;
+    height: 100vh;
+}
+
+}
