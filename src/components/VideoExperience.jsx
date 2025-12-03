@@ -1,7 +1,7 @@
 // src/components/VideoExperience.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { scenes } from "../data/scenes";
+import { scenes, allVideoUrls } from "../data/scenes";
 import Hotspot from "./Hotspot";
 import "./VideoExperience.css";
 
@@ -20,6 +20,10 @@ const VideoExperience = () => {
   const [activeDetailHotspot, setActiveDetailHotspot] = useState(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 
+  // preload
+  const [isPreloaded, setIsPreloaded] = useState(false);
+  const [preloadProgress, setPreloadProgress] = useState(0); // optional % display
+
   const activeScene = scenes[activeSceneId];
 
   const isMain = activeSceneId === "main";
@@ -28,6 +32,69 @@ const VideoExperience = () => {
     !isMain && !overlayVisible && Array.isArray(activeScene.detailHotspots);
   const showBackButton =
     !isMain && !overlayVisible && !!activeScene.back;
+
+  // 🔹 GLOBAL PRELOAD of all important videos
+  useEffect(() => {
+    let cancelled = false;
+
+    async function preloadVideos() {
+      const urls = allVideoUrls;
+      let loadedCount = 0;
+
+      const promises = urls.map(
+        (url) =>
+          new Promise((resolve) => {
+            const video = document.createElement("video");
+            video.src = url;
+            video.preload = "auto";
+
+            const onReady = () => {
+              loadedCount += 1;
+              if (!cancelled) {
+                setPreloadProgress(
+                  Math.round((loadedCount / urls.length) * 100)
+                );
+              }
+              cleanup();
+              resolve();
+            };
+
+            const onError = () => {
+              // Even on error we count it, so loader doesn't hang forever
+              loadedCount += 1;
+              if (!cancelled) {
+                setPreloadProgress(
+                  Math.round((loadedCount / urls.length) * 100)
+                );
+              }
+              cleanup();
+              resolve();
+            };
+
+            const cleanup = () => {
+              video.removeEventListener("canplaythrough", onReady);
+              video.removeEventListener("loadeddata", onReady);
+              video.removeEventListener("error", onError);
+            };
+
+            video.addEventListener("canplaythrough", onReady);
+            video.addEventListener("loadeddata", onReady);
+            video.addEventListener("error", onError);
+          })
+      );
+
+      await Promise.all(promises);
+      if (!cancelled) {
+        setIsPreloaded(true);
+      }
+    }
+
+    preloadVideos();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // 🔹 Main Hotspot click → transition IN
   const handleHotspotClick = (hotspot) => {
@@ -65,7 +132,6 @@ const VideoExperience = () => {
 
   // 🔹 Overlay ENDED → only for transitions
   const handleOverlayEnded = () => {
-    // For transitions we fade out and clear mode
     if (overlayMode === "transition") {
       setOverlayVisible(false);
       setOverlayMode(null);
@@ -97,6 +163,21 @@ const VideoExperience = () => {
     }
   };
 
+  // 🔹 PRELOADER SCREEN
+  if (!isPreloaded) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-black text-white">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-12 rounded-full border-4 border-white/30 border-t-white animate-spin" />
+          <div className="text-sm tracking-wide uppercase">
+            Loading experience… {preloadProgress}%
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 🔹 MAIN EXPERIENCE UI
   return (
     <div className="bg-black flex items-center justify-center VideoExperienceWrap">
       <div className="relative w-full aspect-[16/9] overflow-hidden h-full">
@@ -109,7 +190,7 @@ const VideoExperience = () => {
             autoPlay={scene.id === activeSceneId}
             muted
             loop
-        preload={scene.id === activeSceneId ? "auto" : "metadata"}
+            preload={scene.id === activeSceneId ? "auto" : "metadata"}
             style={{
               opacity: scene.id === activeSceneId ? 1 : 0,
               transition: "opacity 0s linear",
@@ -127,10 +208,10 @@ const VideoExperience = () => {
               className="absolute inset-0 w-full h-full left-0 top-0 right-0 bottom-0 object-cover"
               autoPlay
               muted
-              // Loop ONLY when it's a detail video
-              loop={overlayMode === "detailVideo"}
-              // Only transitions should react to onEnded
-              onEnded={overlayMode === "transition" ? handleOverlayEnded : undefined}
+              loop={overlayMode === "detailVideo"} // Loop ONLY when it's a detail video
+              onEnded={
+                overlayMode === "transition" ? handleOverlayEnded : undefined
+              }
               initial={{ opacity: 0 }}
               animate={{ opacity: overlayVisible ? 1 : 0 }}
               transition={{ duration: OVERLAY_FADE_TIME }}

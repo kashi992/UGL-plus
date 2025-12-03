@@ -76,3 +76,13 @@ export const scenes = {
     ],
   },
 };
+
+
+export const allVideoUrls = [
+  home1,
+  transitionMainToSection1,
+  home2,
+  transitionSection1ToMain,
+  UGLServices3_asset1,
+  UGLServices3_asset2,
+];
