@@ -187,7 +187,7 @@ const VideoExperience = () => {
             key={scene.id}
             src={scene.videoSrc}
             className="absolute inset-0 w-full h-full left-0 top-0 right-0 bottom-0 object-cover"
-            autoPlay={scene.id === activeSceneId}
+            autoPlay
             muted
             loop
             preload={scene.id === activeSceneId ? "auto" : "metadata"}
