@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { scenes } from "../data/scenes";
 import Hotspot from "./Hotspot";
 import "./VideoExperience.css";
+import { li } from "framer-motion/client";
 
 const OVERLAY_FADE_TIME = 0.25; // seconds
 
@@ -184,6 +185,8 @@ const VideoExperience = () => {
                       y={h.y}
                       label={h.label}
                       onClick={() => handleInnerVideoHotspotClick(h)}
+                      className="bg-[#1841784d] px-14 border-[1px] border-white rounded-full w-[36px] h-[36px] flex items-center justify-center text-[16px]"
+                      style={{ padding: "0" }}
                     />
                   ))}
               </>
@@ -198,10 +201,10 @@ const VideoExperience = () => {
             style={
               uglBg
                 ? {
-                    backgroundImage: `url(${uglBg})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }
+                  backgroundImage: `url(${uglBg})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }
                 : {}
             }
           >
@@ -226,6 +229,7 @@ const VideoExperience = () => {
               y={h.y}
               label={h.label}
               onClick={() => handleHotspotClick(h)}
+              className="secondaryClrBg"
             />
           ))}
 
@@ -238,6 +242,7 @@ const VideoExperience = () => {
               y={h.y}
               label={h.label}
               onClick={() => handleDetailHotspotClick(h)}
+              className="secondaryClrBg"
             />
           ))}
 
@@ -309,7 +314,7 @@ const VideoExperience = () => {
               exit={{ opacity: 0 }}
             >
               <motion.div
-                className="bg-white rounded-xl shadow-2xl max-w-lg w-[90%] p-6 relative"
+                className="bg-[#ffffffd6] rounded-[10px] max-w-[1228px] w-[90%] py-[65px] px-[50px] relative" style={{ filter: "drop-shadow(-0.628px 8.978px 8px rgba(24,65,120,0.69))" }}
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
@@ -317,28 +322,37 @@ const VideoExperience = () => {
               >
                 <button
                   onClick={closeLightbox}
-                  className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl leading-none"
+                  className="absolute top-4 right-4 z-20 bg-black text-white rounded-full w-8 h-8 flex items-center justify-center text-sm"
                 >
-                  ×
+                  ✕
                 </button>
-
-                <h3 className="text-lg font-semibold mb-3">
-                  {activeLightboxItem.title || activeLightboxItem.label}
-                </h3>
-
-                {activeLightboxItem.image && (
-                  <img
-                    src={activeLightboxItem.image}
-                    alt={activeLightboxItem.title || activeLightboxItem.label}
-                    className="w-full rounded-md mb-3 object-cover"
-                  />
-                )}
-
-                {activeLightboxItem.description && (
-                  <p className="text-sm text-gray-700 whitespace-pre-line">
-                    {activeLightboxItem.description}
-                  </p>
-                )}
+                <div className="flex gap-10 items-center">
+                  {activeLightboxItem.image && (
+                    <div className="max-w-[438px] w-full">
+                      <img
+                        src={activeLightboxItem.image}
+                        alt={activeLightboxItem.title || activeLightboxItem.label}
+                        className="w-full rounded-md mb-3 object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="text-center">
+                    <h3 className="text-[30px] text-[#094460] font-bold mb-[50px]">
+                      {activeLightboxItem.title || activeLightboxItem.label}
+                    </h3>
+                    <ul className="flex flex-col gap-8">
+                      {activeLightboxItem.description && (
+                        activeLightboxItem.description.map((data, index) => (
+                          <li key={index}>
+                            <p className="text-sm text-gray-700 whitespace-pre-line">
+                              {data.desc}
+                            </p>
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  </div>
+                </div>
               </motion.div>
             </motion.div>
           )}

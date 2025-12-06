@@ -6,6 +6,7 @@ const transitionSection1ToMain = "https://dx7w9sbbk48t1.cloudfront.net/Tranistio
 const UGLServices3_asset1 = "https://dx7w9sbbk48t1.cloudfront.net/Electrical.mp4";
 const UGLServices3_asset2 = "https://dx7w9sbbk48t1.cloudfront.net/Mechanical.mp4";
 import uglBG from "../assets/images/UGL-BG.jpg";
+import thirdLayerModalImg1 from "../assets/images/third-layer-modal-img.jpg";
 
 export const scenes = {
   // main (if you still use it later)
@@ -53,18 +54,29 @@ export const scenes = {
         // ⭐ 3rd-level hotspots INSIDE THIS VIDEO
         innerHotspots: [{
           id: "elec_lightbox_1",
-          x: 25,
-          y: 30,
-          label: "Switchgear",
-          title: "Switchgear Upgrades",
-          description: "Information about switchgear upgrades, safety, and reliability improvements.",
-          image: "/images/switchgear.jpg", // optional
+          x: 65,
+          y: 75,
+          label: "1",
+          title: "UGL Electrical Engineering Specialist Teams",
+          description: [
+            { desc: "dummy" },
+            { desc: "dummy2" }
+          ],
+          image: thirdLayerModalImg1, // optional
         },
         {
           id: "elec_lightbox_2",
-          x: 60,
-          y: 55,
-          label: "Control room",
+          x: 49,
+          y: 44,
+          label: "2",
+          title: "Control Room",
+          description: "Details about control room integration, SCADA and monitoring.",
+        },
+        {
+          id: "elec_lightbox_3",
+          x: 35,
+          y: 32,
+          label: "3",
           title: "Control Room",
           description: "Details about control room integration, SCADA and monitoring.",
         },
