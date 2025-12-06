@@ -6,6 +6,7 @@ const transitionSection1ToMain = "https://dx7w9sbbk48t1.cloudfront.net/Tranistio
 const UGLServices3_asset1 = "https://dx7w9sbbk48t1.cloudfront.net/Electrical.mp4";
 const UGLServices3_asset2 = "https://dx7w9sbbk48t1.cloudfront.net/Mechanical.mp4";
 import uglBG from "../assets/images/UGL-BG.jpg";
+import electricalImage from "../assets/images/electrical_machine.png";
 
 export const scenes = {
   // main (if you still use it later)
@@ -55,18 +56,28 @@ export const scenes = {
           id: "elec_lightbox_1",
           x: 25,
           y: 30,
-          label: "Switchgear",
-          title: "Switchgear Upgrades",
-          description: "Information about switchgear upgrades, safety, and reliability improvements.",
-          image: "/images/switchgear.jpg", // optional
+          label: "3",
+          title: "UGL Electrical Engineering Specialist Teams",
+          description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset's lifecycle.",
+          image: electricalImage,
         },
         {
           id: "elec_lightbox_2",
           x: 60,
           y: 55,
-          label: "Control room",
-          title: "Control Room",
-          description: "Details about control room integration, SCADA and monitoring.",
+          label: "2",
+          title: "UGL Electrical Engineering Specialist Teams",
+          description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset's lifecycle.",
+          image: electricalImage,
+        },
+        {
+          id: "mech_lightbox_1",
+          x: 40,
+          y: 35,
+          label: "1",
+          title: "UGL Electrical Engineering Specialist Teams",
+          description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset’s lifecycle.",
+          image: electricalImage,
         },
         ],
       },
@@ -84,12 +95,30 @@ export const scenes = {
         },
 
         innerHotspots: [{
+          id: "elec_lightbox_1",
+          x: 25,
+          y: 30,
+          label: "3",
+          title: "UGL Electrical Engineering Specialist Teams",
+          description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset's lifecycle.",
+          image: electricalImage,
+        },
+        {
+          id: "elec_lightbox_2",
+          x: 60,
+          y: 55,
+          label: "2",
+          title: "UGL Electrical Engineering Specialist Teams",
+          description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset's lifecycle.",
+          image: electricalImage,
+        },{
           id: "mech_lightbox_1",
           x: 40,
           y: 35,
-          label: "Pumps",
-          title: "Pump Maintenance",
-          description: "Overview of pump maintenance capabilities and reliability focus.",
+          label: "1",
+          title: "UGL Electrical Engineering Specialist Teams",
+          description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset’s lifecycle.",
+          image: electricalImage,
         },],
       },
     ],
