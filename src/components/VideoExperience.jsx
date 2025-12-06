@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { scenes } from "../data/scenes";
 import Hotspot from "./Hotspot";
+import Lightbox from "./Lightbox";
 import "./VideoExperience.css";
 
 const OVERLAY_FADE_TIME = 0.25; // seconds
@@ -165,15 +166,16 @@ const VideoExperience = () => {
                 </button>
 
                 {/* "More info" button for sidebar (optional) */}
-                {activeDetailHotspot?.modalContent && (
+                {/* {activeDetailHotspot?.modalContent && (
                   <button
                     type="button"
                     onClick={() => setIsInfoSidebarOpen(true)}
-                    className="absolute bottom-6 right-4 z-20 primaryClrBg primaryClr text-black rounded-[10px] text-[14px] px-4 py-2 shadow"
+                    className="absolute bottom-6 right-4 z-20 primaryClrBg text-white rounded-full w-10 h-10 flex items-center justify-center shadow hover:opacity-90 transition-opacity"
+                    title="More info"
                   >
-                    {activeDetailHotspot.modalButtonText || "More info"}
+                    <i className="fas fa-info text-lg"></i>
                   </button>
-                )}
+                )} */}
 
                 {/* ⭐ INNER-INNER HOTSPOTS OVER DETAIL VIDEO */}
                 {Array.isArray(activeDetailHotspot?.innerHotspots) &&
@@ -300,49 +302,9 @@ const VideoExperience = () => {
         </AnimatePresence>
 
         {/* ⭐ CENTER LIGHTBOX FOR INNER-INNER HOTSPOTS */}
-        <AnimatePresence>
-          {activeLightboxItem && (
-            <motion.div
-              className="fixed inset-0 z-40 flex items-center justify-center bg-black/60"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="bg-white rounded-xl shadow-2xl max-w-lg w-[90%] p-6 relative"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <button
-                  onClick={closeLightbox}
-                  className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl leading-none"
-                >
-                  ×
-                </button>
-
-                <h3 className="text-lg font-semibold mb-3">
-                  {activeLightboxItem.title || activeLightboxItem.label}
-                </h3>
-
-                {activeLightboxItem.image && (
-                  <img
-                    src={activeLightboxItem.image}
-                    alt={activeLightboxItem.title || activeLightboxItem.label}
-                    className="w-full rounded-md mb-3 object-cover"
-                  />
-                )}
-
-                {activeLightboxItem.description && (
-                  <p className="text-sm text-gray-700 whitespace-pre-line">
-                    {activeLightboxItem.description}
-                  </p>
-                )}
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {activeLightboxItem && (
+          <Lightbox data={activeLightboxItem} onClose={closeLightbox} />
+        )}
       </div>
     </div>
   );
