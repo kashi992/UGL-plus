@@ -1,30 +1,32 @@
 // src/components/VideoExperience.jsx
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { scenes, allVideoUrls } from "../data/scenes";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { scenes } from "../data/scenes";
 import Hotspot from "./Hotspot";
 import "./VideoExperience.css";
 
 const OVERLAY_FADE_TIME = 0.25; // seconds
 
 const VideoExperience = () => {
+  // for now you said we start directly on UGLServices3
   const [activeSceneId, setActiveSceneId] = useState("main");
 
   const [overlaySrc, setOverlaySrc] = useState(null);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [pendingBaseSceneId, setPendingBaseSceneId] = useState(null);
 
-  // NEW: is this overlay a transition or a detail video?
   const [overlayMode, setOverlayMode] = useState(null); // "transition" | "detailVideo" | null
 
   const [activeDetailHotspot, setActiveDetailHotspot] = useState(null);
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [isInfoSidebarOpen, setIsInfoSidebarOpen] = useState(false);
 
-  // preload
-  const [isPreloaded, setIsPreloaded] = useState(false);
-  const [preloadProgress, setPreloadProgress] = useState(0); // optional % display
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
-  const activeScene = scenes[activeSceneId];
+  // ⭐ NEW: 3rd-level lightbox state (hotspot inside detail video)
+  const [activeLightboxItem, setActiveLightboxItem] = useState(null);
+
+  const activeScene = scenes[activeSceneId] || scenes.main;
+  const uglBg = activeScene?.loadingBg || activeScene?.bg || "";
 
   const isMain = activeSceneId === "main";
   const showMainHotspots = isMain && !overlayVisible;
@@ -33,75 +35,13 @@ const VideoExperience = () => {
   const showBackButton =
     !isMain && !overlayVisible && !!activeScene.back;
 
-  // 🔹 GLOBAL PRELOAD of all important videos
-  useEffect(() => {
-    let cancelled = false;
-
-    async function preloadVideos() {
-      const urls = allVideoUrls;
-      let loadedCount = 0;
-
-      const promises = urls.map(
-        (url) =>
-          new Promise((resolve) => {
-            const video = document.createElement("video");
-            video.src = url;
-            video.preload = "auto";
-
-            const onReady = () => {
-              loadedCount += 1;
-              if (!cancelled) {
-                setPreloadProgress(
-                  Math.round((loadedCount / urls.length) * 100)
-                );
-              }
-              cleanup();
-              resolve();
-            };
-
-            const onError = () => {
-              // Even on error we count it, so loader doesn't hang forever
-              loadedCount += 1;
-              if (!cancelled) {
-                setPreloadProgress(
-                  Math.round((loadedCount / urls.length) * 100)
-                );
-              }
-              cleanup();
-              resolve();
-            };
-
-            const cleanup = () => {
-              video.removeEventListener("canplaythrough", onReady);
-              video.removeEventListener("loadeddata", onReady);
-              video.removeEventListener("error", onError);
-            };
-
-            video.addEventListener("canplaythrough", onReady);
-            video.addEventListener("loadeddata", onReady);
-            video.addEventListener("error", onError);
-          })
-      );
-
-      await Promise.all(promises);
-      if (!cancelled) {
-        setIsPreloaded(true);
-      }
-    }
-
-    preloadVideos();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // 🔹 Main Hotspot click → transition IN
+  // ─────────────────────────────
+  // MAIN HOTSPOT (scene to scene)
+  // ─────────────────────────────
   const handleHotspotClick = (hotspot) => {
     if (overlayVisible) return;
 
     setPendingBaseSceneId(hotspot.targetSceneId);
-
     setOverlaySrc(hotspot.transitionIn);
     setOverlayMode("transition");
     setOverlayVisible(true);
@@ -112,7 +52,6 @@ const VideoExperience = () => {
     }, OVERLAY_FADE_TIME * 1000 + 20);
   };
 
-  // 🔹 Back click → transition OUT
   const handleBackClick = () => {
     if (overlayVisible) return;
     if (!activeScene.back) return;
@@ -130,85 +69,81 @@ const VideoExperience = () => {
     }, OVERLAY_FADE_TIME * 1000 + 20);
   };
 
-  // 🔹 Overlay ENDED → only for transitions
   const handleOverlayEnded = () => {
     if (overlayMode === "transition") {
       setOverlayVisible(false);
       setOverlayMode(null);
-      // optional: setOverlaySrc(null);
     }
   };
 
-  // 🔹 Detail hotspot (inside destination scene)
+  // ─────────────────────────────
+  // INNER HOTSPOTS (inside scene)
+  // ─────────────────────────────
   const handleDetailHotspotClick = (hotspot) => {
     if (overlayVisible) return;
 
     if (hotspot.type === "modal") {
+      // ➜ RIGHT SIDEBAR INFO (if you still want this type)
       setActiveDetailHotspot(hotspot);
-      setIsInfoModalOpen(true);
+      setIsInfoSidebarOpen(true);
     } else if (hotspot.type === "video") {
-      // Detail overlay video → LOOP and DO NOT auto-hide
+      // ➜ DETAIL VIDEO OVERLAY
+      setActiveDetailHotspot(hotspot); // we need it for "More info" and inner hotspots
       setOverlaySrc(hotspot.videoSrc);
       setOverlayMode("detailVideo");
       setOverlayVisible(true);
+      setActiveLightboxItem(null); // reset any previous lightbox
     }
   };
 
-  // Close button for detail video overlay
   const handleCloseDetailVideo = () => {
     if (overlayMode === "detailVideo") {
       setOverlayVisible(false);
       setOverlayMode(null);
-      // optional: setOverlaySrc(null);
+      // keep activeDetailHotspot so we can still open sidebar/lightbox if needed
     }
   };
 
-  // 🔹 PRELOADER SCREEN
-  if (!isPreloaded) {
-    return (
-      <div className="w-full h-screen flex items-center justify-center bg-black text-white">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-full border-4 border-white/30 border-t-white animate-spin" />
-          <div className="text-sm tracking-wide uppercase">
-            Loading experience… {preloadProgress}%
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // ─────────────────────────────
+  // INNER-INNER HOTSPOTS (inside detail video)
+  // ─────────────────────────────
+  const handleInnerVideoHotspotClick = (item) => {
+    // just open center lightbox with this item's data
+    setActiveLightboxItem(item);
+  };
 
-  // 🔹 MAIN EXPERIENCE UI
+  const closeLightbox = () => {
+    setActiveLightboxItem(null);
+  };
+
   return (
-    <div className="bg-black flex items-center justify-center VideoExperienceWrap">
+    <div className="flex items-center justify-center VideoExperienceWrap">
       <div className="relative w-full aspect-[16/9] overflow-hidden h-full">
-        {/* BASE LAYER: all scene videos preloaded & looping */}
-        {Object.values(scenes).map((scene) => (
-          <video
-            key={scene.id}
-            src={scene.videoSrc}
-            className="absolute inset-0 w-full h-full left-0 top-0 right-0 bottom-0 object-cover"
-            autoPlay
-            muted
-            loop
-            preload={scene.id === activeSceneId ? "auto" : "metadata"}
-            style={{
-              opacity: scene.id === activeSceneId ? 1 : 0,
-              transition: "opacity 0s linear",
-              pointerEvents: "none",
-            }}
-          />
-        ))}
+        {/* BASE SCENE VIDEO */}
+        <video
+          key={activeScene.id}
+          src={activeScene.videoSrc}
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          preload="auto"
+          onCanPlayThrough={() => {
+            if (isInitialLoading) setIsInitialLoading(false);
+          }}
+          style={{ pointerEvents: "none" }}
+        />
 
-        {/* OVERLAY: used for both transitions and detail videos */}
+        {/* OVERLAY VIDEOS: transitions + detail */}
         {overlaySrc && (
           <>
             <motion.video
               key={overlaySrc}
               src={overlaySrc}
-              className="absolute inset-0 w-full h-full left-0 top-0 right-0 bottom-0 object-cover"
+              className="absolute inset-0 w-full h-full object-cover"
               autoPlay
               muted
-              loop={overlayMode === "detailVideo"} // Loop ONLY when it's a detail video
+              loop={overlayMode === "detailVideo"}
               onEnded={
                 overlayMode === "transition" ? handleOverlayEnded : undefined
               }
@@ -218,20 +153,71 @@ const VideoExperience = () => {
               preload="metadata"
             />
 
-            {/* Close button ONLY for looping detail videos */}
+            {/* Close + More info buttons ONLY for detail video */}
             {overlayMode === "detailVideo" && overlayVisible && (
-              <button
-                type="button"
-                onClick={handleCloseDetailVideo}
-                className="absolute top-4 right-4 z-20 bg-black/70 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm"
-              >
-                ✕
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={handleCloseDetailVideo}
+                  className="absolute top-4 right-4 z-20 bg-black/70 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm"
+                >
+                  ✕
+                </button>
+
+                {/* "More info" button for sidebar (optional) */}
+                {activeDetailHotspot?.modalContent && (
+                  <button
+                    type="button"
+                    onClick={() => setIsInfoSidebarOpen(true)}
+                    className="absolute bottom-6 right-4 z-20 primaryClrBg primaryClr text-black rounded-[10px] text-[14px] px-4 py-2 shadow"
+                  >
+                    {activeDetailHotspot.modalButtonText || "More info"}
+                  </button>
+                )}
+
+                {/* ⭐ INNER-INNER HOTSPOTS OVER DETAIL VIDEO */}
+                {Array.isArray(activeDetailHotspot?.innerHotspots) &&
+                  activeDetailHotspot.innerHotspots.map((h) => (
+                    <Hotspot
+                      key={h.id}
+                      x={h.x}
+                      y={h.y}
+                      label={h.label}
+                      onClick={() => handleInnerVideoHotspotClick(h)}
+                    />
+                  ))}
+              </>
             )}
           </>
         )}
 
-        {/* Main hotspots */}
+        {/* FIRST LOAD OVERLAY (with uglBg from scenes.js) */}
+        {isInitialLoading && (
+          <div
+            className="absolute inset-0 flex items-center justify-center text-white z-30"
+            style={
+              uglBg
+                ? {
+                    backgroundImage: `url(${uglBg})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }
+                : {}
+            }
+          >
+            <div
+              className="flex flex-col items-center gap-3 p-6 rounded-lg"
+              style={{ backdropFilter: "contrast(0.5)" }}
+            >
+              <div className="w-12 h-12 rounded-full border-4 border-white/40 border-t-white animate-spin" />
+              <div className="text-sm tracking-wide uppercase">
+                Loading…
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MAIN HOTSPOTS (only when active scene is 'main') */}
         {showMainHotspots &&
           activeScene.hotspots?.map((h) => (
             <Hotspot
@@ -243,7 +229,7 @@ const VideoExperience = () => {
             />
           ))}
 
-        {/* Detail hotspots */}
+        {/* INNER HOTSPOTS (inside UGLServices3 etc.) */}
         {showDetailHotspots &&
           activeScene.detailHotspots?.map((h) => (
             <Hotspot
@@ -255,7 +241,7 @@ const VideoExperience = () => {
             />
           ))}
 
-        {/* Back button */}
+        {/* BACK BUTTON (from detail scene back to main) */}
         {showBackButton && (
           <button
             type="button"
@@ -266,28 +252,97 @@ const VideoExperience = () => {
           </button>
         )}
 
-        {/* Info modal for detail hotspots (type="modal") */}
-        {isInfoModalOpen && activeDetailHotspot && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-30">
-            <div className="bg-white rounded-lg p-4 max-w-md w-full">
-              <h2 className="font-semibold mb-2">
-                {activeDetailHotspot.modalContent?.title}
-              </h2>
-              <p className="text-sm text-gray-700">
-                {activeDetailHotspot.modalContent?.description}
-              </p>
-              <button
-                className="mt-4 px-3 py-1 bg-black text-white text-sm rounded"
-                onClick={() => {
-                  setIsInfoModalOpen(false);
-                  setActiveDetailHotspot(null);
-                }}
+        {/* RIGHT SIDEBAR INFO (for type: modal or More info) */}
+        <AnimatePresence>
+          {isInfoSidebarOpen && activeDetailHotspot && (
+            <motion.div
+              className="fixed inset-0 z-30 flex justify-end bg-black/40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="h-full w-full max-w-md bg-white shadow-2xl p-5 overflow-y-auto relative"
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ duration: 0.25 }}
               >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <h2 className="font-semibold text-lg">
+                    {activeDetailHotspot.modalContent?.title ||
+                      activeDetailHotspot.label}
+                  </h2>
+                  <button
+                    onClick={() => setIsInfoSidebarOpen(false)}
+                    className="text-gray-500 hover:text-black text-xl leading-none"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {activeDetailHotspot.modalContent?.description && (
+                  <p className="text-sm text-gray-700 whitespace-pre-line">
+                    {activeDetailHotspot.modalContent.description}
+                  </p>
+                )}
+
+                {activeDetailHotspot.modalContent?.points && (
+                  <ul className="mt-3 list-disc list-inside text-sm text-gray-700">
+                    {activeDetailHotspot.modalContent.points.map((p, i) => (
+                      <li key={i}>{p}</li>
+                    ))}
+                  </ul>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ⭐ CENTER LIGHTBOX FOR INNER-INNER HOTSPOTS */}
+        <AnimatePresence>
+          {activeLightboxItem && (
+            <motion.div
+              className="fixed inset-0 z-40 flex items-center justify-center bg-black/60"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="bg-white rounded-xl shadow-2xl max-w-lg w-[90%] p-6 relative"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <button
+                  onClick={closeLightbox}
+                  className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl leading-none"
+                >
+                  ×
+                </button>
+
+                <h3 className="text-lg font-semibold mb-3">
+                  {activeLightboxItem.title || activeLightboxItem.label}
+                </h3>
+
+                {activeLightboxItem.image && (
+                  <img
+                    src={activeLightboxItem.image}
+                    alt={activeLightboxItem.title || activeLightboxItem.label}
+                    className="w-full rounded-md mb-3 object-cover"
+                  />
+                )}
+
+                {activeLightboxItem.description && (
+                  <p className="text-sm text-gray-700 whitespace-pre-line">
+                    {activeLightboxItem.description}
+                  </p>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
