@@ -54,8 +54,8 @@ export const scenes = {
         // ⭐ 3rd-level hotspots INSIDE THIS VIDEO
         innerHotspots: [{
           id: "elec_lightbox_1",
-          x: 25,
-          y: 30,
+          x: 13,
+          y: 69,
           label: "3",
           title: "UGL Electrical Engineering Specialist Teams",
           description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset's lifecycle.",
@@ -63,8 +63,8 @@ export const scenes = {
         },
         {
           id: "elec_lightbox_2",
-          x: 60,
-          y: 55,
+          x: 48,
+          y: 71,
           label: "2",
           title: "UGL Electrical Engineering Specialist Teams",
           description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset's lifecycle.",
@@ -72,8 +72,8 @@ export const scenes = {
         },
         {
           id: "mech_lightbox_1",
-          x: 40,
-          y: 35,
+          x: 66,
+          y: 71,
           label: "1",
           title: "UGL Electrical Engineering Specialist Teams",
           description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset’s lifecycle.",
