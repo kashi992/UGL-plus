@@ -186,6 +186,8 @@ const VideoExperience = () => {
                       y={h.y}
                       label={h.label}
                       onClick={() => handleInnerVideoHotspotClick(h)}
+                         className={`w-[36px] h-[36px]`}
+              style={{padding: "0", borderRadius: "50%", border: "1px solid #fff", backgroundColor:"rgba(24,65,120,0.30196078431372547)"}}
                     />
                   ))}
               </>
