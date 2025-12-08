@@ -228,6 +228,7 @@ const VideoExperience = () => {
               y={h.y}
               label={h.label}
               onClick={() => handleHotspotClick(h)}
+              disabled={h.disabled}
             />
           ))}
 
