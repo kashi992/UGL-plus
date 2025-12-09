@@ -7,6 +7,7 @@ const UGLServices3_asset1 = "https://dx7w9sbbk48t1.cloudfront.net/Electrical.mp4
 const UGLServices3_asset2 = "https://dx7w9sbbk48t1.cloudfront.net/Mechanical.mp4";
 import uglBG from "../assets/images/UGL-BG.jpg";
 import electricalImage from "../assets/images/electrical_machine.png";
+const electricalVideo3 = "https://dx7w9sbbk48t1.cloudfront.net/THE_VISION.mp4";
 
 export const scenes = {
   // main (if you still use it later)
@@ -89,16 +90,17 @@ export const scenes = {
         },
 
         // ⭐ 3rd-level hotspots INSIDE THIS VIDEO
-        innerHotspots: [{
+        innerHotspots: [       
+        {
           id: "elec_lightbox_1",
-          x: 13,
-          y: 69,
-          label: "3",
+          x: 66,
+          y: 71,
+          label: "1",
           title: "UGL Electrical Engineering Specialist Teams",
-          description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset's lifecycle.",
+          description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset’s lifecycle.",
           image: electricalImage,
         },
-        {
+         {
           id: "elec_lightbox_2",
           x: 48,
           y: 71,
@@ -108,13 +110,14 @@ export const scenes = {
           image: electricalImage,
         },
         {
-          id: "mech_lightbox_1",
-          x: 66,
-          y: 71,
-          label: "1",
+          id: "elec_lightbox_3",
+          x: 13,
+          y: 69,
+          label: "3",
           title: "UGL Electrical Engineering Specialist Teams",
-          description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset’s lifecycle.",
-          image: electricalImage,
+          description: "Our in-house specialist engineers develop designs that consider construction, maintenance and end performance objectives from the outset, reducing whole-of-life costs. \n\n They apply extensive experience to improve time and cost outcomes, minimise interface risks and ensure effective knowledge transfer from construction into ongoing operations with a continual focus on safety. \n\n Our technology and product agnostic approach, and disciplined systems engineering and integration, further guarantees best-for-project outcomes. This engineering DNA then becomes a perpetual resource through an asset's lifecycle.",
+          video: "https://dx7w9sbbk48t1.cloudfront.net/THE_VISION.mp4",
+          poster: "https://dx7w9sbbk48t1.cloudfront.net/Vision_Thumbnail.jpg",
         },
         ],
       },

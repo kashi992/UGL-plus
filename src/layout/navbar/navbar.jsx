@@ -38,12 +38,13 @@ const Navbar = () => {
           <nav className="dropdown-menu">
             <div className="dropdown-heading">Major Projects:</div>
             <ul className="menu-list">
-              <li><a href="#" onClick={closeMenu}>Cross River Rail</a></li>
-              <li><a href="#" onClick={closeMenu}>M5 Motor Way</a></li>
-              <li><a href="#" onClick={closeMenu}>Transmission Line</a></li>
-              <li><a href="#" onClick={closeMenu}>CSW Line Wide Works</a></li>
-              <li><a href="#" onClick={closeMenu}>Project 5</a></li>
-              <li><a href="#" onClick={closeMenu}>Project 6</a></li>
+              <li><Link to="" className="text-[#529bbe]" onClick={closeMenu}>Cross River Rail</Link></li>
+              <li><Link to="" className="text-[#529bbe]" onClick={closeMenu}>M5 Motor Way</Link></li>
+              <li><Link to="" className="text-[#529bbe]" onClick={closeMenu}>Transmission Line</Link></li>
+              <li><Link to="" className="text-[#529bbe]" onClick={closeMenu}>CSW Line Wide Works</Link></li>
+              <li><Link to="" className="text-[#529bbe]" onClick={closeMenu}>Project 5</Link></li>
+              <li><Link to="" className="text-[#529bbe]" onClick={closeMenu}>Project 6</Link></li>
+              <li><Link to="/home" className="text-red-600" onClick={closeMenu}>HOME</Link></li>
             </ul>
           </nav>
         )}

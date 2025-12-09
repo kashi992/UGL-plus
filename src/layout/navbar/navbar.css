@@ -102,7 +102,7 @@ padding-bottom: 8px;
   border-radius: 4px;
   animation: slideDown 0.3s ease;
   z-index: 1101;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
 }
 
 @keyframes slideDown {
@@ -137,9 +137,8 @@ color: #529bbe;
 .menu-list li a {
   display: block;
   padding: 10px 20px 10px 30px;
-  color: #529bbe;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 14px;
   transition: background-color 0.2s ease;
 }
